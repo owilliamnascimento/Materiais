@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Materiais de apoio — Prof. William do Nascimento</title>
+<meta name="description" content="Livros, slides e vídeos das unidades curriculares do Prof. William do Nascimento.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #12264A;
+    --ink-soft: #3C4C6B;
+    --paper: #F7FAFC;
+    --grid: #DCE6EF;
+    --line: #C8D5E2;
+    --marker: #FFD84D;
+    --livro: #2457A6;
+    --slide: #B7650B;
+    --video: #C23B3B;
+    --ok: #17805F;
+    --white: #FFFFFF;
+    --font-title: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+    --font-body: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--ink);
+    background-color: var(--paper);
+    /* papel quadriculado */
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; border-radius: 6px; }
+
+  /* ---------- Barra fixa no topo ---------- */
+  .topbar {
+    position: sticky; top: 0; z-index: 10;
+    background: var(--ink);
+    color: var(--white);
+    padding: 10px 16px;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px;
+    box-shadow: 0 2px 0 var(--marker);
+  }
+  .topbar .nome {
+    font-family: var(--font-title); font-weight: 700; font-size: 1.05rem;
+    text-decoration: none; margin-right: auto; white-space: nowrap;
+  }
+  .search { position: relative; flex: 1 1 280px; max-width: 520px; }
+  .search input {
+    width: 100%; min-height: 46px;
+    padding: 10px 14px 10px 42px;
+    font: inherit; color: var(--ink);
+    background: var(--white);
+    border: 2px solid transparent; border-radius: 10px;
+  }
+  .search input:focus { outline: 3px solid var(--marker); border-color: var(--white); }
+  .search svg { position: absolute; left: 12px; top: 50%; translate: 0 -50%; width: 20px; height: 20px; stroke: var(--ink-soft); }
+  .btn-share {
+    min-height: 46px; padding: 0 16px; font: inherit; font-weight: 700;
+    color: var(--ink); background: var(--marker);
+    border: 0; border-radius: 10px; cursor: pointer;
+  }
+  .btn-share:hover { filter: brightness(0.95); }
+
+  /* ---------- Apresentação ---------- */
+  .hero { max-width: 1040px; margin: 0 auto; padding: 40px 16px 24px; }
+  .hero h1 {
+    font-family: var(--font-title); font-weight: 700;
+    font-size: clamp(1.9rem, 5.5vw, 3.2rem); line-height: 1.08;
+    margin: 0 0 8px; max-width: 18ch;
+  }
+  .hero h1 span {
+    background: linear-gradient(transparent 60%, var(--marker) 60%);
+    padding: 0 4px; margin: 0 -4px;
+  }
+  .hero p.sub { margin: 0 0 20px; color: var(--ink-soft); max-width: 60ch; }
+  .contactos { display: flex; flex-wrap: wrap; gap: 10px; }
+  .contactos a {
+    display: inline-flex; align-items: center; gap: 8px;
+    min-height: 46px; padding: 0 16px;
+    background: var(--white); border: 2px solid var(--ink);
+    border-radius: 10px; text-decoration: none; font-weight: 700;
+  }
+  .contactos a:hover { background: var(--ink); color: var(--white); }
+  .contactos small { font-weight: 400; color: inherit; opacity: .8; }
+
+  /* ---------- Lista de UCs ---------- */
+  main { max-width: 1040px; margin: 0 auto; padding: 8px 16px 48px; }
+  .estado { min-height: 1.6em; margin: 0 0 12px; color: var(--ink-soft); }
+  details.uc {
+    background: var(--white);
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  details.uc > summary {
+    list-style: none; cursor: pointer;
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px 18px;
+  }
+  details.uc > summary::-webkit-details-marker { display: none; }
+  details.uc > summary::after {
+    content: ""; margin-left: auto; flex: none;
+    width: 12px; height: 12px;
+    border-right: 3px solid var(--ink); border-bottom: 3px solid var(--ink);
+    rotate: 45deg; transition: rotate .2s;
+  }
+  details.uc[open] > summary::after { rotate: -135deg; }
+  details.uc[open] > summary { border-bottom: 2px solid var(--ink); background: #EEF4FA; }
+  .uc-nome { font-family: var(--font-title); font-weight: 700; font-size: 1.3rem; line-height: 1.2; }
+  .uc-info { display: block; font-size: .95rem; color: var(--ink-soft); font-family: var(--font-body); font-weight: 400; }
+  .uc-corpo {
+    display: grid; gap: 22px 28px;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    padding: 18px;
+  }
+  .grupo h3 {
+    display: flex; align-items: center; gap: 8px;
+    font-family: var(--font-title); font-size: 1.05rem; margin: 0 0 10px;
+  }
+  .grupo h3::before { content: ""; width: 12px; height: 12px; border-radius: 3px; background: var(--cor); }
+  .grupo.livros { --cor: var(--livro); }
+  .grupo.slides { --cor: var(--slide); }
+  .grupo.videos { --cor: var(--video); }
+  .grupo ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .item {
+    border-left: 4px solid var(--cor);
+    background: #F4F8FB;
+    padding: 10px 12px; border-radius: 0 8px 8px 0;
+  }
+  .item .titulo { display: block; margin-bottom: 8px; font-weight: 700; overflow-wrap: anywhere; }
+  .acoes { display: flex; flex-wrap: wrap; gap: 8px; }
+  .acoes a, .acoes span {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 44px; padding: 0 14px; border-radius: 8px;
+    font-weight: 700; text-decoration: none; font-size: .95rem;
+  }
+  .acoes a.baixar { background: var(--ok); color: var(--white); }
+  .acoes a.abrir  { background: var(--white); color: var(--ink); border: 2px solid var(--ink); }
+  .acoes a.yt     { background: var(--video); color: var(--white); }
+  .acoes a:hover  { filter: brightness(1.12); }
+  .acoes a.abrir:hover { background: #EEF4FA; filter: none; }
+  .acoes span.breve { background: #E6ECF2; color: var(--ink-soft); font-weight: 400; }
+  .vazio-grupo { color: var(--ink-soft); margin: 0; font-size: .95rem; }
+  mark { background: var(--marker); color: inherit; padding: 0 1px; border-radius: 3px; }
+
+  footer { text-align: center; padding: 20px 16px 36px; color: var(--ink-soft); font-size: .9rem; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: 24px; translate: -50% 0;
+    background: var(--ink); color: var(--white);
+    padding: 12px 20px; border-radius: 10px; font-weight: 700;
+    opacity: 0; pointer-events: none; transition: opacity .2s;
+  }
+  .toast.on { opacity: 1; }
+
+  @media (max-width: 560px) {
+    body { font-size: 16px; }
+    .topbar .nome { white-space: normal; }
+    .btn-share { flex: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="nome" href="#topo" id="nomeTopo"></a>
+  <label class="search">
+    <span class="sr" style="position:absolute;left:-9999px">Pesquisar</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <input id="q" type="search" placeholder="Pesquisar disciplina, livro, slide ou vídeo" autocomplete="off">
+  </label>
+  <button class="btn-share" id="btnLink" type="button">Copiar link do site</button>
+</header>
+
+<section class="hero" id="topo">
+  <h1 id="h1"></h1>
+  <p class="sub" id="sub"></p>
+  <div class="contactos" id="contactos"></div>
+</section>
+
+<main>
+  <p class="estado" id="estado" aria-live="polite"></p>
+  <div id="lista"></div>
+</main>
+
+<footer id="rodape"></footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* =====================================================================
+   ÁREA DE EDIÇÃO — é só aqui que precisa de mexer.
+   Altere os textos entre aspas. Não apague vírgulas, chavetas { } ou
+   parêntesis rectos [ ].
+   ===================================================================== */
+
+const SITE = {
+  nome: "William da Trindade do Nascimento",
+  titulo: "Materiais de apoio às aulas",
+  descricao: "Escolha a sua disciplina, abra a lista e descarregue os livros e slides ou veja os vídeos.",
+  telemovel: "+239 000 0000",          // <- coloque o seu número, com +239
+  email: "o.seu.email@exemplo.com",     // <- coloque o seu e-mail
+  atualizado: "Outubro de 2026"
+};
+
+/* COMO ADICIONAR UM FICHEIRO DO GOOGLE DRIVE
+   1. No Drive, clique com o botão direito no ficheiro > Partilhar >
+      "Qualquer pessoa com o link" > Leitor.
+   2. Copie o link. Ele é parecido com:
+      https://drive.google.com/file/d/ESTE_CODIGO_GRANDE/view?usp=sharing
+   3. Cole apenas o código grande (entre /d/ e /view) em  drive: "..."
+
+   COMO ADICIONAR UM VÍDEO DO YOUTUBE
+   Cole o link completo do vídeo em  youtube: "https://youtu.be/..."
+
+   Se ainda não tem o link, deixe  drive: ""  e aparece "Em breve".
+*/
+
+const UCS = [
+  {
+    nome: "Estatística Descritiva",
+    livros: [
+      { titulo: "Livro de Estatística Descritiva (exemplo)", drive: "" }
+    ],
+    slides: [
+      { titulo: "Slides de Estatística Descritiva (exemplo)", drive: "" }
+    ],
+    videos: [
+      { titulo: "Introdução à Estatística Descritiva (exemplo)", youtube: "" }
+    ]
+  },
+  { nome: "Estatística I",                livros: [], slides: [], videos: [] },
+  { nome: "Estatística II",               livros: [], slides: [], videos: [] },
+  { nome: "Estatística e Probabilidades", livros: [], slides: [], videos: [] },
+  { nome: "Matemática Discreta",          livros: [], slides: [], videos: [] },
+  { nome: "Álgebra I",                    livros: [], slides: [], videos: [] },
+  { nome: "Álgebra II",                   livros: [], slides: [], videos: [] }
+];
+
+/* =====================================================================
+   FIM DA ÁREA DE EDIÇÃO — daqui para baixo não é preciso mexer.
+   ===================================================================== */
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm = s => String(s).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+function destaque(texto, q) {
+  if (!q) return esc(texto);
+  const i = norm(texto).indexOf(q);
+  if (i < 0) return esc(texto);
+  return esc(texto.slice(0, i)) + "<mark>" + esc(texto.slice(i, i + q.length)) + "</mark>" + esc(texto.slice(i + q.length));
+}
+
+function acoesFicheiro(it) {
+  if (it.drive) {
+    const id = encodeURIComponent(it.drive);
+    return `<a class="baixar" href="https://drive.google.com/uc?export=download&id=${id}" rel="noopener">Descarregar</a>
+            <a class="abrir" href="https://drive.google.com/file/d/${id}/view" target="_blank" rel="noopener">Abrir</a>`;
+  }
+  if (it.url) return `<a class="baixar" href="${esc(it.url)}" target="_blank" rel="noopener">Descarregar</a>`;
+  return `<span class="breve">Em breve</span>`;
+}
+function acoesVideo(it) {
+  if (it.youtube) return `<a class="yt" href="${esc(it.youtube)}" target="_blank" rel="noopener">Ver no YouTube</a>`;
+  return `<span class="breve">Em breve</span>`;
+}
+
+function grupo(classe, nome, itens, q, tipo) {
+  const lis = itens.map(it => `
+    <li class="item">
+      <span class="titulo">${destaque(it.titulo, q)}</span>
+      <div class="acoes">${tipo === "video" ? acoesVideo(it) : acoesFicheiro(it)}</div>
+    </li>`).join("");
+  return `<section class="grupo ${classe}">
+    <h3>${nome}</h3>
+    ${itens.length ? `<ul>${lis}</ul>` : `<p class="vazio-grupo">Ainda sem materiais.</p>`}
+  </section>`;
+}
+
+function desenhar(q) {
+  const lista = $("lista");
+  let total = 0, ucsVisiveis = 0;
+  const html = UCS.map(uc => {
+    const ucBate = q && norm(uc.nome + " " + (uc.info || "")).includes(q);
+    const filtra = arr => !q || ucBate ? arr : arr.filter(it => norm(it.titulo).includes(q));
+    const livros = filtra(uc.livros), slides = filtra(uc.slides), videos = filtra(uc.videos);
+    const n = livros.length + slides.length + videos.length;
+    if (q && !ucBate && n === 0) return "";
+    ucsVisiveis++; total += n;
+    const abre = q ? " open" : "";
+    return `<details class="uc"${abre}>
+      <summary><span class="uc-nome">${destaque(uc.nome, q)}<span class="uc-info">${esc(uc.info || "")}</span></span></summary>
+      <div class="uc-corpo">
+        ${grupo("livros", "Livros", livros, q, "ficheiro")}
+        ${grupo("slides", "Slides", slides, q, "ficheiro")}
+        ${grupo("videos", "Vídeos", videos, q, "video")}
+      </div>
+    </details>`;
+  }).join("");
+  lista.innerHTML = html;
+  const estado = $("estado");
+  if (!q) estado.textContent = "Toque numa disciplina para ver os materiais.";
+  else if (!ucsVisiveis) estado.textContent = "Nada encontrado. Tente outra palavra.";
+  else estado.textContent = ucsVisiveis + (ucsVisiveis === 1 ? " disciplina encontrada" : " disciplinas encontradas") + (total ? " · " + total + (total === 1 ? " material" : " materiais") : "");
+}
+
+/* Topo, contactos e rodapé */
+document.title = "Materiais de apoio — " + SITE.nome;
+$("nomeTopo").textContent = SITE.nome;
+$("h1").innerHTML = "<span>" + esc(SITE.titulo) + "</span>";
+$("sub").textContent = SITE.descricao;
+const tel = SITE.telemovel.replace(/[^\d+]/g, "");
+const wa = SITE.telemovel.replace(/\D/g, "");
+$("contactos").innerHTML = `
+  <a href="tel:${esc(tel)}">Ligar <small>${esc(SITE.telemovel)}</small></a>
+  <a href="https://wa.me/${esc(wa)}" target="_blank" rel="noopener">WhatsApp</a>
+  <a href="mailto:${esc(SITE.email)}">E-mail <small>${esc(SITE.email)}</small></a>`;
+$("rodape").textContent = SITE.nome + " · Atualizado em " + SITE.atualizado;
+
+/* Pesquisa */
+$("q").addEventListener("input", e => desenhar(norm(e.target.value.trim())));
+
+/* Copiar link */
+function aviso(msg) {
+  const t = $("toast"); t.textContent = msg; t.classList.add("on");
+  setTimeout(() => t.classList.remove("on"), 1800);
+}
+$("btnLink").addEventListener("click", async () => {
+  const url = location.href.split("#")[0];
+  try { await navigator.clipboard.writeText(url); aviso("Link copiado"); }
+  catch (e) { window.prompt("Copie o link:", url); }
+});
+
+desenhar("");
+</script>
+</body>
+</html>
