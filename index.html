@@ -446,7 +446,7 @@ function desenhar(q) {
 }
 
 /* Topo, contactos e rodapé */
-document.title = "Materiais de apoio — " + SITE.nome;
+document.title = "Materiais de apoio — William da Trindade do Nascimento";
 $("nomeTopo").textContent = SITE.nome;
 $("h1").innerHTML = "<span>" + esc(SITE.titulo) + "</span>";
 $("sub").textContent = SITE.descricao;
@@ -456,7 +456,7 @@ $("contactos").innerHTML = `
   <a href="tel:${esc(tel)}">Ligar <small>${esc(SITE.telemovel)}</small></a>
   <a href="https://wa.me/${esc(wa)}" target="_blank" rel="noopener">WhatsApp</a>
   <a href="mailto:${esc(SITE.email)}">E-mail <small>${esc(SITE.email)}</small></a>`;
-$("rodape").textContent = SITE.nome + " · Atualizado em " + SITE.atualizado;
+$("rodape").textContent = "William da Trindade do Nascimento · Atualizado em " + SITE.atualizado;
 
 /* Pesquisa */
 $("q").addEventListener("input", e => desenhar(norm(e.target.value.trim())));
