@@ -177,6 +177,104 @@
     html { scroll-behavior: auto; }
     * { transition: none !important; }
   }
+
+  /* ---------- Quiz ---------- */
+  .grupo.quiz { --cor: #7A3FB0; grid-column: 1 / -1; }
+  .quiz-card {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px;
+    border-left: 4px solid var(--cor); background: #F4F8FB;
+    padding: 12px 14px; border-radius: 0 8px 8px 0;
+  }
+  .quiz-card p { margin: 4px 0 0; }
+  .quiz-card .melhor { font-size: .9rem; color: var(--ink-soft); }
+  .btn-jogar {
+    min-height: 46px; padding: 0 20px; font: inherit; font-weight: 700;
+    color: var(--white); background: var(--ink); border: 0; border-radius: 10px;
+    box-shadow: 0 3px 0 var(--marker); cursor: pointer;
+  }
+  .btn-jogar:hover { filter: brightness(1.2); }
+
+  dialog.qz-janela {
+    width: min(1000px, 100vw); max-width: 100vw;
+    height: min(760px, 100vh); height: min(760px, 100dvh); max-height: 100dvh;
+    padding: 0; border: 2px solid var(--marker); border-radius: 16px;
+    color: #fff; overflow: hidden;
+    background: radial-gradient(120% 90% at 50% 0%, #1D4A9A 0%, #0E2556 55%, #08142F 100%);
+  }
+  dialog.qz-janela::backdrop { background: rgba(5, 12, 30, .8); }
+  dialog.qz-janela :focus-visible { outline: 3px solid var(--marker); outline-offset: 2px; }
+  body:has(dialog.qz-janela[open]) { overflow: hidden; }
+  .qz { display: grid; grid-template-columns: 1fr 200px; grid-template-rows: minmax(0, 1fr); height: 100%; }
+  .qz.fim { grid-template-columns: 1fr; }
+  .qz-main { display: flex; flex-direction: column; gap: 14px; padding: 18px 22px; min-height: 0; overflow-y: auto; }
+  .qz-top { display: flex; align-items: center; gap: 10px; }
+  .qz-titulo { margin-right: auto; font-family: var(--font-title); font-weight: 700; font-size: 1.1rem; }
+  .qz-fechar {
+    min-height: 40px; padding: 0 14px; font: inherit; font-weight: 700; color: #fff;
+    background: transparent; border: 2px solid #8FA6D4; border-radius: 10px; cursor: pointer;
+  }
+  .qz-fechar:hover { border-color: var(--marker); }
+  .qz-estado { color: #C9D6F0; }
+  .qz-estado strong { color: var(--marker); }
+  .qz-nota { display: block; font-size: .92rem; }
+  .ajudas { display: flex; flex-wrap: wrap; gap: 8px; }
+  .ajuda {
+    min-height: 44px; padding: 0 16px; font: inherit; font-weight: 700; color: #fff;
+    background: transparent; border: 2px solid #8FA6D4; border-radius: 999px; cursor: pointer;
+  }
+  .ajuda:hover:not(:disabled) { border-color: var(--marker); }
+  .ajuda:disabled { opacity: .4; text-decoration: line-through; cursor: default; }
+  .qz-pergunta {
+    padding: 20px; text-align: center; font-family: var(--font-title); font-weight: 600;
+    font-size: clamp(1.15rem, 3.4vw, 1.6rem); line-height: 1.3;
+    background: rgba(8, 20, 47, .65); border: 2px solid var(--marker); border-radius: 14px;
+  }
+  .qz-pergunta:focus { outline: none; }
+  .qz-opcoes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .opc {
+    position: relative; display: flex; align-items: center; gap: 10px; min-height: 58px;
+    padding: 10px 18px; font: inherit; text-align: left; color: #fff; cursor: pointer; overflow: hidden;
+    background: linear-gradient(#173A78, #0E2556); border: 2px solid #8FA6D4; border-radius: 999px;
+  }
+  .opc b { color: var(--marker); font-family: var(--font-title); }
+  .opc:hover:not(:disabled) { border-color: var(--marker); }
+  .opc:disabled { cursor: default; color: #fff; }
+  .opc.escolhida { color: var(--ink); background: var(--marker); border-color: var(--marker); animation: respira .6s ease-in-out infinite alternate; }
+  .opc.escolhida b { color: var(--ink); }
+  .opc.certa { background: var(--ok); border-color: #fff; }
+  .opc.errada { background: var(--video); border-color: #fff; }
+  .opc.certa b, .opc.errada b { color: #fff; }
+  .opc.fora { visibility: hidden; }
+  .opc .pct { margin-left: auto; font-weight: 700; }
+  .opc .barra { position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: rgba(255, 255, 255, .15); }
+  .opc .barra i { display: block; height: 100%; background: var(--marker); }
+  @keyframes respira { from { filter: brightness(1); } to { filter: brightness(.82); } }
+  .qz-expl { padding: 12px 14px; background: rgba(255, 255, 255, .1); border-left: 4px solid var(--marker); border-radius: 8px; }
+  .btn-amarelo, .btn-parar { min-height: 48px; padding: 0 22px; font: inherit; font-weight: 700; border-radius: 10px; cursor: pointer; }
+  .btn-amarelo { align-self: flex-start; color: var(--ink); background: var(--marker); border: 0; }
+  .btn-parar { align-self: flex-start; color: #fff; background: transparent; border: 2px solid #8FA6D4; }
+  .btn-parar:hover { border-color: var(--marker); }
+  .qz-escada {
+    list-style: none; margin: 0; padding: 14px 12px; display: flex; flex-direction: column-reverse;
+    justify-content: center; gap: 4px; background: rgba(5, 12, 30, .55); border-left: 2px solid rgba(255, 255, 255, .15);
+  }
+  .qz-escada li { display: flex; justify-content: space-between; gap: 8px; padding: 5px 10px; color: #B9C8E8; border-radius: 6px; font-variant-numeric: tabular-nums; }
+  .qz-escada li.feita { color: #fff; }
+  .qz-escada li.seguro { color: var(--marker); font-weight: 700; }
+  .qz-escada li.atual { color: var(--ink); background: var(--marker); font-weight: 700; }
+  .qz-centro { align-items: center; justify-content: center; text-align: center; }
+  .qz-centro h2 { margin: 0; font-family: var(--font-title); font-size: clamp(1.5rem, 5vw, 2.2rem); }
+  .qz-centro p { margin: 0; }
+  .qz-pontos strong { display: block; font-family: var(--font-title); font-size: clamp(2.4rem, 9vw, 4rem); color: var(--marker); line-height: 1.1; }
+  .qz-botoes { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  @media (max-width: 700px) {
+    dialog.qz-janela { width: 100vw; height: 100vh; height: 100dvh; border: 0; border-radius: 0; }
+    .qz { grid-template-columns: 1fr; }
+    .qz-escada { display: none; }
+    .qz-main { padding: 14px; }
+    .qz-opcoes { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { .opc.escolhida { animation: none; } }
 </style>
 </head>
 <body>
@@ -213,6 +311,9 @@
 </main>
 
 <footer id="rodape"></footer>
+<dialog class="qz-janela" id="quiz" aria-label="Quiz da disciplina">
+  <div class="qz" id="qzCorpo"></div>
+</dialog>
 <div class="toast" id="toast" role="status"></div>
 
 <script>
@@ -244,9 +345,132 @@ const SITE = {
    Se ainda não tem o link, deixe  drive: ""  e aparece "Em breve".
 */
 
+/* =====================================================================
+   QUIZ — perguntas de cada disciplina
+
+   COMO ADICIONAR PERGUNTAS
+   Cada pergunta é uma linha assim:
+     { p: "Pergunta?", o: ["Resposta CERTA", "Errada", "Errada", "Errada"], e: "Explicação curta." },
+   - A PRIMEIRA resposta da lista é sempre a CERTA. Não se preocupe:
+     o jogo mistura as respostas sozinho (A, B, C, D).
+   - As 10 primeiras perguntas formam o jogo, da mais fácil à mais difícil.
+   - A 11.ª pergunta (e as seguintes) são reservas, usadas na ajuda «Saltar».
+   - Todas as linhas terminam com vírgula, menos a última de cada lista.
+   - Para dar um quiz a uma disciplina, escreva  quiz: NOME_DA_LISTA,
+     logo a seguir ao nome dela (veja mais abaixo, em const UCS).
+   ===================================================================== */
+
+const QUIZ_ESTATISTICA = [
+  { p: "Como se chama o conjunto de todos os elementos que interessam ao estudo estatístico?",
+    o: ["População", "Amostra", "Variável", "Frequência"],
+    e: "A população é o conjunto total em estudo; a amostra é apenas uma parte dela." },
+  { p: "A variável «estado civil» é classificada como:",
+    o: ["Qualitativa nominal", "Qualitativa ordinal", "Quantitativa discreta", "Quantitativa contínua"],
+    e: "São categorias (solteiro, casado, …) sem uma ordem natural." },
+  { p: "Qual destas variáveis é quantitativa discreta?",
+    o: ["Número de filhos de uma família", "Altura de um aluno", "Cor dos olhos", "Peso de um saco de arroz"],
+    e: "Contagens (0, 1, 2, …) são discretas; altura e peso são contínuas; a cor é qualitativa." },
+  { p: "Qual é a moda do conjunto 2, 3, 3, 4, 4, 4, 5?",
+    o: ["4", "3", "3,57", "5"],
+    e: "A moda é o valor que mais se repete: o 4 aparece três vezes. (3,57 é a média.)" },
+  { p: "Qual é a média de 2, 4, 6, 8 e 10?",
+    o: ["6", "5", "30", "8"],
+    e: "(2 + 4 + 6 + 8 + 10) ÷ 5 = 30 ÷ 5 = 6." },
+  { p: "Qual é a mediana de 3, 9, 5, 7 e 1?",
+    o: ["5", "3", "7", "25"],
+    e: "Ordenando: 1, 3, 5, 7, 9. O valor central é 5." },
+  { p: "Em 40 observações, o valor 8 aparece 10 vezes. Qual é a sua frequência relativa?",
+    o: ["0,25", "0,10", "0,40", "4"],
+    e: "Frequência relativa = 10 ÷ 40 = 0,25 (ou 25%)." },
+  { p: "Qual é a amplitude total de 12, 7, 19, 3 e 15?",
+    o: ["16", "15", "22", "11,2"],
+    e: "Amplitude = máximo − mínimo = 19 − 3 = 16." },
+  { p: "O desvio padrão é:",
+    o: ["A raiz quadrada da variância", "O quadrado da variância", "A diferença entre o máximo e o mínimo", "A média dos valores"],
+    e: "s = √variância. Mede, nas mesmas unidades dos dados, o quanto os valores se afastam da média." },
+  { p: "O coeficiente de variação calcula-se por:",
+    o: ["Desvio padrão ÷ média", "Média ÷ desvio padrão", "Variância ÷ média", "Mediana ÷ desvio padrão"],
+    e: "CV = s ÷ média, normalmente em percentagem. Permite comparar a dispersão de conjuntos com unidades ou médias diferentes." },
+  { p: "Se somarmos 5 a todos os valores de um conjunto, o que acontece ao desvio padrão?",
+    o: ["Não se altera", "Aumenta 5 unidades", "Fica multiplicado por 5", "Fica igual à média"],
+    e: "Somar uma constante desloca todos os dados, mas não muda o afastamento entre eles." }
+];
+
+const QUIZ_ALGEBRA_I = [
+  { p: "Uma operação binária num conjunto G associa a cada par de elementos de G:",
+    o: ["Um elemento de G", "Um subconjunto de G", "Um número real qualquer", "Dois elementos de G"],
+    e: "É uma função G × G → G: o resultado de operar dois elementos de G fica sempre em G." },
+  { p: "Qual destes é um exemplo de grupo?",
+    o: ["(ℤ, +)", "(ℕ, +)", "(ℤ, ·)", "(ℕ, ·)"],
+    e: "Em (ℤ, +) há elemento neutro (0) e cada n tem inverso (−n). Nos outros faltam inversos." },
+  { p: "Num grupo (G, ∗), o elemento neutro e verifica:",
+    o: ["a ∗ e = e ∗ a = a, para todo a ∈ G", "a ∗ e = e, para todo a ∈ G", "a ∗ e = e ∗ a = 0, para todo a ∈ G", "a ∗ a = e, para todo a ∈ G"],
+    e: "O neutro deixa qualquer elemento inalterado quando se opera com ele." },
+  { p: "Um grupo (G, ∗) diz-se abeliano quando:",
+    o: ["a ∗ b = b ∗ a, para todos a, b ∈ G", "Tem elemento neutro", "Tem um número finito de elementos", "Todo elemento é o seu próprio inverso"],
+    e: "Abeliano (ou comutativo) significa que a ordem em que se opera não interessa." },
+  { p: "Quantos elementos neutros pode ter um grupo?",
+    o: ["Exatamente um", "Pelo menos dois", "Tantos quantos os seus elementos", "Pode não ter nenhum"],
+    e: "O neutro é único: se e e e′ fossem neutros, e = e ∗ e′ = e′." },
+  { p: "No grupo (ℤ₄, +), dos inteiros módulo 4, qual é o inverso de 3?",
+    o: ["1", "3", "0", "2"],
+    e: "3 + 1 = 4 ≡ 0 (mod 4), e 0 é o elemento neutro." },
+  { p: "Um subconjunto não vazio H de um grupo G é um subgrupo se, e só se:",
+    o: ["a ∗ b⁻¹ ∈ H, para todos a, b ∈ H", "H contém o elemento neutro", "H tem menos elementos que G", "H é abeliano"],
+    e: "É o critério do subgrupo: basta verificar que a ∗ b⁻¹ fica em H." },
+  { p: "Qual destes é um subgrupo de (ℤ, +)?",
+    o: ["2ℤ, os inteiros pares", "Os inteiros ímpares", "ℕ", "{−1, 0, 1}"],
+    e: "A soma de pares é par, 0 é par e o simétrico de um par é par. Nos outros falha o fecho ou os inversos." },
+  { p: "Se H é subgrupo de um grupo finito G, o teorema de Lagrange garante que:",
+    o: ["|H| divide |G|", "|G| divide |H|", "|H| = |G|", "|H| = |G| ÷ 2"],
+    e: "A ordem de qualquer subgrupo divide a ordem do grupo." },
+  { p: "Se |G| = 12, qual destes valores NÃO pode ser a ordem de um subgrupo de G?",
+    o: ["5", "4", "6", "3"],
+    e: "Pelo teorema de Lagrange a ordem tem de dividir 12. O 5 não divide 12." },
+  { p: "Qual é a ordem do elemento 1 no grupo (ℤ₆, +)?",
+    o: ["6", "1", "3", "2"],
+    e: "1 + 1 + 1 + 1 + 1 + 1 = 6 ≡ 0 (mod 6): são precisas 6 somas para chegar ao neutro." }
+];
+
+const QUIZ_FM_I = [
+  { p: "Qual destas frases é uma proposição?",
+    o: ["7 é um número primo.", "Que horas são?", "Feche a porta.", "x + 2 = 5"],
+    e: "Proposição é uma frase declarativa com valor lógico V ou F. Perguntas, ordens e frases com variável por definir não são." },
+  { p: "Qual é a negação de «Hoje chove»?",
+    o: ["Hoje não chove", "Amanhã chove", "Hoje chove muito", "Hoje chove e faz frio"],
+    e: "Negar uma proposição é afirmar o contrário: se p é «Hoje chove», ¬p é «Hoje não chove»." },
+  { p: "A conjunção «p e q» (p ∧ q) só é verdadeira quando:",
+    o: ["p e q são ambas verdadeiras", "Pelo menos uma delas é verdadeira", "p e q são ambas falsas", "p é verdadeira e q é falsa"],
+    e: "Com «e», as duas partes têm de ser verdadeiras." },
+  { p: "A disjunção «p ou q» (p ∨ q) só é falsa quando:",
+    o: ["p e q são ambas falsas", "p e q são ambas verdadeiras", "p é falsa", "q é verdadeira"],
+    e: "Basta uma das partes ser verdadeira para «p ou q» ser verdadeira." },
+  { p: "Quantos subconjuntos tem o conjunto {a, b, c}?",
+    o: ["8", "6", "3", "9"],
+    e: "Um conjunto com n elementos tem 2ⁿ subconjuntos: 2³ = 8." },
+  { p: "A condicional p → q (se p, então q) só é falsa quando:",
+    o: ["p é verdadeira e q é falsa", "p é falsa e q é verdadeira", "p e q são ambas falsas", "p e q são ambas verdadeiras"],
+    e: "Uma promessa só é quebrada quando a condição se cumpre e a consequência não." },
+  { p: "Dados A = {1, 2, 3, 4} e B = {3, 4, 5}, quanto é A ∩ B?",
+    o: ["{3, 4}", "{1, 2, 3, 4, 5}", "{1, 2}", "{5}"],
+    e: "A interseção tem os elementos que estão em A e em B ao mesmo tempo." },
+  { p: "Qual é a negação de «Todos os alunos passaram»?",
+    o: ["Pelo menos um aluno não passou", "Nenhum aluno passou", "Todos os alunos reprovaram", "Algum aluno passou"],
+    e: "¬(∀x P(x)) equivale a ∃x ¬P(x): basta um aluno não ter passado." },
+  { p: "A proposição p ∨ ¬p (p ou não p) é:",
+    o: ["Uma tautologia", "Uma contradição", "Falsa quando p é verdadeira", "Verdadeira só quando p é falsa"],
+    e: "Tem sempre valor lógico verdadeiro, qualquer que seja p. É uma tautologia." },
+  { p: "A negação de «p e q» é equivalente a:",
+    o: ["¬p ∨ ¬q", "¬p ∧ ¬q", "p ∨ q", "¬p ∧ q"],
+    e: "Pela lei de De Morgan: ¬(p ∧ q) ≡ ¬p ∨ ¬q." },
+  { p: "A bicondicional p ↔ q (p se, e somente se, q) é verdadeira quando:",
+    o: ["p e q têm o mesmo valor lógico", "p e q são ambas verdadeiras, e só nesse caso", "p é verdadeira", "p e q têm valores lógicos diferentes"],
+    e: "É verdadeira quando as duas são verdadeiras ou as duas são falsas." }
+];
+
 const UCS = [
   {
-    nome: "Estatística Descritiva",
+    nome: "Estatística Descritiva", quiz: QUIZ_ESTATISTICA,
     livros: [
       { titulo: "Curso de Estatística - Jairo fonseca e Gilberto Martins", drive: "1zaapZ7k_lDzeRxQqDm38a6XEa2T5XlGI" },
       { titulo: "Estatística Descritiva - E. Reis", drive: "1TPpOzZLu7dH-bJPE_2V_vvb2BUG8iWHT" },
@@ -287,7 +511,7 @@ const UCS = [
       { titulo: "Outliers", youtube: "https://youtu.be/C4mQtxaFZ6g?si=Jd7DsHVnFtnWa6JY" }
     ]
   },
-  { nome: "Estatística I",
+  { nome: "Estatística I", quiz: QUIZ_ESTATISTICA,
   livros: [
       { titulo: "Curso de Estatística - Jairo fonseca e Gilberto Martins", drive: "1zaapZ7k_lDzeRxQqDm38a6XEa2T5XlGI" },
       { titulo: "Estatística Descritiva - E. Reis", drive: "1TPpOzZLu7dH-bJPE_2V_vvb2BUG8iWHT" },
@@ -328,7 +552,7 @@ const UCS = [
     ]
   },
   { nome: "Estatística II",               livros: [], slides: [], videos: [] },
-  { nome: "Estatística e Probabilidades",
+  { nome: "Estatística e Probabilidades", quiz: QUIZ_ESTATISTICA,
    livros: [
       { titulo: "Curso de Estatística - Jairo fonseca e Gilberto Martins", drive: "1zaapZ7k_lDzeRxQqDm38a6XEa2T5XlGI" },
       { titulo: "Estatística Descritiva - E. Reis", drive: "1TPpOzZLu7dH-bJPE_2V_vvb2BUG8iWHT" },
@@ -361,7 +585,7 @@ const UCS = [
     ] 
   },
   { nome: "Matemática Discreta",          livros: [], slides: [], videos: [] },
-  { nome: "Álgebra I",
+  { nome: "Álgebra I", quiz: QUIZ_ALGEBRA_I,
    livros: [
      { titulo: "Introdução à Álgebra - Leminar Andrade", drive: "1rZ7fkSg4MmYYJY_jpbFGOdepgWitzASz" }
    ],
@@ -386,7 +610,7 @@ const UCS = [
    ]
   },
   { nome: "Álgebra II",                   livros: [], slides: [], videos: [] },
-  { nome: "Fundamentos da Matemática I",
+  { nome: "Fundamentos da Matemática I", quiz: QUIZ_FM_I,
    livros: [
      { titulo: "Fundamentos da Matemática I - Gelson e Murakani", drive: "1IvP_ONQsLOD-98PQmcWhorczxtg1VQTP" }
    ],
@@ -455,12 +679,13 @@ function grupo(classe, nome, itens, q, tipo) {
 function desenhar(q) {
   const lista = $("lista");
   let total = 0, ucsVisiveis = 0;
-  const html = UCS.map(uc => {
+  const html = UCS.map((uc, ix) => {
     const ucBate = q && norm(uc.nome + " " + (uc.info || "")).includes(q);
     const filtra = arr => !q || ucBate ? arr : arr.filter(it => norm(it.titulo).includes(q));
     const livros = filtra(uc.livros), slides = filtra(uc.slides), videos = filtra(uc.videos);
     const n = livros.length + slides.length + videos.length;
-    if (q && !ucBate && n === 0) return "";
+    const quizBate = q.length >= 2 && "quiz".includes(q) && (uc.quiz || []).length > 0;
+    if (q && !ucBate && !quizBate && n === 0) return "";
     ucsVisiveis++; total += n;
     const abre = q ? " open" : "";
     return `<details class="uc"${abre}>
@@ -469,6 +694,7 @@ function desenhar(q) {
         ${grupo("livros", "Livros", livros, q, "ficheiro")}
         ${grupo("slides", "Slides", slides, q, "ficheiro")}
         ${grupo("videos", "Vídeos", videos, q, "video")}
+        ${!q || ucBate || quizBate ? grupoQuiz(uc, ix) : ""}
       </div>
     </details>`;
   }).join("");
@@ -504,6 +730,281 @@ $("btnLink").addEventListener("click", async () => {
   const url = location.href.split("#")[0];
   try { await navigator.clipboard.writeText(url); aviso("Link copiado"); }
   catch (e) { window.prompt("Copie o link:", url); }
+});
+
+/* =====================================================================
+   QUIZ — jogo estilo «Quem quer ser milionário?»
+   ===================================================================== */
+const PREMIOS = [100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000];
+const LETRAS = "ABCD";
+const dlg = $("quiz");
+let Q = null;
+
+const fmt = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+
+function misturar(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function lerMelhor(nome) {
+  try { return Number(localStorage.getItem("quiz:" + nome)) || 0; } catch (e) { return 0; }
+}
+function gravarMelhor(nome, v) {
+  try { if (v > lerMelhor(nome)) localStorage.setItem("quiz:" + nome, String(v)); } catch (e) {}
+}
+function atualizarMelhor(ix, nome) {
+  const m = lerMelhor(nome);
+  document.querySelectorAll('[data-melhor="' + ix + '"]').forEach(p => {
+    p.hidden = !m;
+    const s = p.querySelector("strong");
+    if (s) s.textContent = fmt(m);
+  });
+}
+
+/* Caixa «Quiz» dentro de cada disciplina */
+function grupoQuiz(uc, ix) {
+  const total = (uc.quiz || []).length;
+  if (!total) return `<section class="grupo quiz"><h3>Quiz</h3><p class="vazio-grupo">Em breve.</p></section>`;
+  const n = Math.min(10, total), ajudas = total > n ? 3 : 2, melhor = lerMelhor(uc.nome);
+  return `<section class="grupo quiz">
+    <h3>Quiz</h3>
+    <div class="quiz-card">
+      <div>
+        <strong>Desafio estilo «Quem quer ser milionário?»</strong>
+        <p>${n} perguntas, ${ajudas} ajudas e pontos em jogo. Teste o que aprendeu.</p>
+        <p class="melhor" data-melhor="${ix}"${melhor ? "" : " hidden"}>O seu melhor resultado neste aparelho: <strong>${fmt(melhor)}</strong> pontos</p>
+      </div>
+      <button type="button" class="btn-jogar" data-quiz="${ix}">Jogar quiz</button>
+    </div>
+  </section>`;
+}
+
+/* Preparar uma pergunta: a 1.ª resposta é a certa; as respostas são misturadas */
+function preparar(p) {
+  return {
+    p: p.p, e: p.e || "",
+    opcoes: misturar(p.o.map((t, i) => ({ t, certa: i === 0 }))),
+    fora: [], pct: null, escolhida: -1, revelada: false
+  };
+}
+
+function iniciar(ix) {
+  const uc = UCS[ix], lista = uc.quiz;
+  const n = Math.min(10, lista.length);
+  Q = {
+    ix, nome: uc.nome, n,
+    premios: PREMIOS.slice(0, n),
+    seguro: n > 5 ? 4 : -1,            /* ponto seguro: pergunta 5 */
+    perguntas: lista.slice(0, n),
+    reservas: misturar(lista.slice(n)),
+    idx: 0, meio: true, turma: true, saltar: lista.length > n,
+    atual: null, fim: null, timer: null
+  };
+  Q.atual = preparar(Q.perguntas[0]);
+  mostrar();
+}
+
+function abrirQuiz(ix) {
+  if (typeof dlg.showModal !== "function") { aviso("Atualize o navegador para jogar o quiz."); return; }
+  iniciar(ix);
+  if (!dlg.open) dlg.showModal();
+}
+
+/* ---------- Ecrãs ---------- */
+function topoQuiz() {
+  return `<div class="qz-top"><span class="qz-titulo">Quiz · ${esc(Q.nome)}</span>
+    <button type="button" class="qz-fechar" data-acao="fechar">Fechar</button></div>`;
+}
+
+function telaPergunta() {
+  const q = Q.atual, i = Q.idx;
+  const bloqueado = q.escolhida >= 0;
+  const levar = i > 0 ? Q.premios[i - 1] : 0;
+
+  const nota = i === Q.seguro
+    ? `<span class="qz-nota">Acertando esta, garante ${fmt(Q.premios[i])} pontos mesmo que falhe depois.</span>` : "";
+
+  const ajuda = (acao, rotulo, titulo, ativa) =>
+    `<button type="button" class="ajuda" data-acao="${acao}" aria-label="${titulo}"${ativa && !bloqueado ? "" : " disabled"}>${rotulo}</button>`;
+
+  const opcoes = q.opcoes.map((o, k) => {
+    let cls = "opc";
+    if (q.fora.includes(k)) cls += " fora";
+    else if (q.revelada && o.certa) cls += " certa";
+    else if (q.revelada && k === q.escolhida) cls += " errada";
+    else if (k === q.escolhida) cls += " escolhida";
+    const pct = q.pct && q.pct[k] != null
+      ? `<span class="pct">${q.pct[k]}%</span><span class="barra"><i style="width:${q.pct[k]}%"></i></span>` : "";
+    return `<button type="button" class="${cls}" data-acao="opcao" data-i="${k}"${bloqueado || q.fora.includes(k) ? " disabled" : ""}>
+      <b>${LETRAS[k]}:</b><span>${esc(o.t)}</span>${pct}</button>`;
+  }).join("");
+
+  const escada = Q.premios.map((v, k) => {
+    const cls = [k === i ? "atual" : k < i ? "feita" : "", k === Q.seguro ? "seguro" : ""].join(" ").trim();
+    return `<li${cls ? ` class="${cls}"` : ""}><span>${k + 1}</span><span>${fmt(v)}</span></li>`;
+  }).join("");
+
+  let rodape = "";
+  if (q.revelada) {
+    const certa = q.opcoes[q.escolhida].certa;
+    const letraCerta = LETRAS[q.opcoes.findIndex(o => o.certa)];
+    const ultima = i === Q.n - 1;
+    rodape = `<div class="qz-expl" role="status"><strong>${certa ? "Certo!" : "Resposta errada."}</strong>
+      ${esc(q.e)}${certa ? "" : " Resposta certa: " + letraCerta + "."}</div>
+      <button type="button" class="btn-amarelo" data-acao="continuar" data-foco>${certa && !ultima ? "Continuar" : "Ver resultado"}</button>`;
+  } else if (!bloqueado && levar > 0) {
+    rodape = `<button type="button" class="btn-parar" data-acao="parar">Parar e levar ${fmt(levar)} pontos</button>`;
+  }
+
+  return `<div class="qz-main">
+      ${topoQuiz()}
+      <div class="qz-estado">Pergunta ${i + 1} de ${Q.n} · a jogar por <strong>${fmt(Q.premios[i])}</strong> pontos${nota}</div>
+      <div class="ajudas">
+        ${ajuda("meio", "50:50", "Ajuda 50:50, elimina duas respostas erradas", Q.meio)}
+        ${ajuda("turma", "Ajuda da turma", "Ajuda da turma, mostra o que a turma respondeu", Q.turma)}
+        ${ajuda("saltar", "Saltar", "Saltar esta pergunta", Q.saltar)}
+      </div>
+      <div class="qz-pergunta" id="qzPergunta" tabindex="-1"${q.revelada ? "" : " data-foco"}>${esc(q.p)}</div>
+      <div class="qz-opcoes">${opcoes}</div>
+      ${rodape}
+    </div>
+    <ol class="qz-escada" aria-label="Escada de pontos">${escada}</ol>`;
+}
+
+function telaFim() {
+  const f = Q.fim, melhor = lerMelhor(Q.nome);
+  const titulo = f.motivo === "ganhou" ? "Parabéns, chegou ao topo!"
+    : f.motivo === "parou" ? "Parou a tempo!"
+    : f.pontos ? "Quase! Ficou com pontos garantidos." : "Não foi desta.";
+  const dica = f.motivo === "ganhou" ? "" : "Reveja os slides e os vídeos e tente outra vez.";
+  return `<div class="qz-main qz-centro">
+      <p class="qz-estado">Quiz · ${esc(Q.nome)}</p>
+      <h2>${titulo}</h2>
+      <p class="qz-pontos"><strong>${fmt(f.pontos)}</strong> pontos</p>
+      <p>Acertou ${f.certas} de ${Q.n} perguntas. ${dica}</p>
+      <p class="qz-estado">Melhor resultado neste aparelho: <strong>${fmt(melhor)}</strong> pontos</p>
+      <div class="qz-botoes">
+        <button type="button" class="btn-amarelo" data-acao="repetir" data-foco>Jogar outra vez</button>
+        <button type="button" class="btn-parar" data-acao="fechar">Fechar</button>
+      </div>
+    </div>`;
+}
+
+function mostrar() {
+  if (!Q) return;
+  const c = $("qzCorpo");
+  c.className = "qz" + (Q.fim ? " fim" : "");
+  c.innerHTML = Q.fim ? telaFim() : telaPergunta();
+  const alvo = c.querySelector("[data-foco]");
+  if (alvo) alvo.focus({ preventScroll: true });
+}
+
+/* ---------- Jogo ---------- */
+function escolher(k) {
+  const q = Q && Q.atual;
+  if (!q || q.escolhida >= 0 || q.fora.includes(k)) return;
+  q.escolhida = k;
+  mostrar();
+  const espera = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 1100;
+  Q.timer = setTimeout(() => {
+    if (!Q || Q.atual !== q) return;
+    q.revelada = true;
+    mostrar();
+  }, espera);
+}
+
+function continuar() {
+  const q = Q.atual;
+  if (!q.revelada) return;
+  if (!q.opcoes[q.escolhida].certa) return terminar("perdeu");
+  if (Q.idx === Q.n - 1) return terminar("ganhou");
+  Q.idx++;
+  Q.atual = preparar(Q.perguntas[Q.idx]);
+  mostrar();
+}
+
+function terminar(motivo) {
+  clearTimeout(Q.timer);
+  const i = Q.idx;
+  let pontos = 0;
+  if (motivo === "ganhou") pontos = Q.premios[Q.n - 1];
+  else if (motivo === "parou") pontos = i > 0 ? Q.premios[i - 1] : 0;
+  else pontos = Q.seguro >= 0 && i > Q.seguro ? Q.premios[Q.seguro] : 0;
+  Q.fim = { motivo, pontos, certas: motivo === "ganhou" ? Q.n : i };
+  gravarMelhor(Q.nome, pontos);
+  atualizarMelhor(Q.ix, Q.nome);
+  mostrar();
+}
+
+/* Ajudas */
+function ajudaMeio() {
+  const q = Q.atual;
+  const erradas = q.opcoes.map((o, k) => k).filter(k => !q.opcoes[k].certa && !q.fora.includes(k));
+  misturar(erradas).slice(0, 2).forEach(k => q.fora.push(k));
+}
+function ajudaTurma() {
+  const q = Q.atual;
+  const vivos = q.opcoes.map((o, k) => k).filter(k => !q.fora.includes(k));
+  const certa = q.opcoes.findIndex(o => o.certa);
+  let forca = 0.72 - 0.04 * Q.idx + (Math.random() * 0.16 - 0.08);
+  forca = Math.max(0.3, Math.min(0.92, forca));
+  const certaPct = Math.round(forca * 100);
+  const outros = vivos.filter(k => k !== certa);
+  const pesos = outros.map(() => 0.3 + Math.random());
+  const soma = pesos.reduce((a, b) => a + b, 0);
+  const pct = {};
+  pct[certa] = certaPct;
+  let usado = certaPct;
+  outros.forEach((k, j) => {
+    const v = j === outros.length - 1 ? 100 - usado : Math.floor((100 - certaPct) * pesos[j] / soma);
+    pct[k] = v;
+    usado += v;
+  });
+  q.pct = pct;
+}
+function saltar() {
+  if (!Q.saltar || !Q.reservas.length) return;
+  Q.saltar = false;
+  Q.perguntas[Q.idx] = Q.reservas.pop();
+  Q.atual = preparar(Q.perguntas[Q.idx]);
+}
+
+/* ---------- Eventos ---------- */
+$("lista").addEventListener("click", e => {
+  const b = e.target.closest("[data-quiz]");
+  if (b) abrirQuiz(Number(b.dataset.quiz));
+});
+
+dlg.addEventListener("click", e => {
+  const b = e.target.closest("[data-acao]");
+  if (!b || !Q) return;
+  const a = b.dataset.acao;
+  if (a === "fechar") return dlg.close();
+  if (a === "opcao") return escolher(Number(b.dataset.i));
+  if (a === "continuar") return continuar();
+  if (a === "parar") return terminar("parou");
+  if (a === "repetir") return iniciar(Q.ix);
+  if (Q.atual.escolhida >= 0) return;
+  if (a === "meio" && Q.meio) { Q.meio = false; ajudaMeio(); }
+  else if (a === "turma" && Q.turma) { Q.turma = false; ajudaTurma(); }
+  else if (a === "saltar") saltar();
+  mostrar();
+});
+
+/* Teclas A, B, C, D para responder */
+dlg.addEventListener("keydown", e => {
+  if (!Q || Q.fim || e.ctrlKey || e.metaKey || e.altKey || e.key.length !== 1) return;
+  const k = "abcd".indexOf(e.key.toLowerCase());
+  if (k >= 0) escolher(k);
+});
+
+dlg.addEventListener("close", () => {
+  if (Q) clearTimeout(Q.timer);
+  Q = null;
+  $("qzCorpo").innerHTML = "";
 });
 
 desenhar("");
