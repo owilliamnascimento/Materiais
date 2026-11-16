@@ -215,6 +215,19 @@
   .btn-jogar { background: var(--acento); border-radius: 999px; box-shadow: none; }
   .grupo.fichas { --cor: #0F7B6C; } .grupo.trabalhos { --cor: #7B3FA0; } .grupo.avaliacoes { --cor: #B8481F; }
 
+  /* Nome da disciplina fixo por baixo da barra enquanto se percorre a lista dela */
+  details.uc { overflow: clip; }
+  details.uc[open] > summary {
+    position: sticky; top: var(--altura-topo, 70px); z-index: 5;
+    border-radius: 16px 16px 0 0; box-shadow: 0 6px 12px -8px rgba(15,42,74,.25);
+  }
+  html { scroll-padding-top: calc(var(--altura-topo, 70px) + 70px); }
+  @media (max-width: 560px) {
+    .topbar { position: static; }
+    details.uc[open] > summary { top: 0; }
+    html { scroll-padding-top: 70px; }
+  }
+
   /* ---------- Quiz ---------- */
   .grupo.quiz { --cor: #7A3FB0; grid-column: 1 / -1; }
   .quiz-card {
@@ -1635,6 +1648,14 @@ dlg.addEventListener("close", () => {
   $("qzCorpo").innerHTML = "";
 });
 
+/* Mede a barra do topo para o nome da disciplina ficar fixo logo por baixo dela */
+function medirTopo() {
+  const t = document.querySelector(".topbar");
+  if (t) document.documentElement.style.setProperty("--altura-topo", t.offsetHeight + "px");
+}
+medirTopo();
+window.addEventListener("resize", medirTopo);
+window.addEventListener("load", medirTopo);
 desenhar("");
 </script>
 <script data-goatcounter="https://williamnascimento.goatcounter.com/count"
