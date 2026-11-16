@@ -136,6 +136,9 @@
   .grupo.livros { --cor: var(--livro); }
   .grupo.slides { --cor: var(--slide); }
   .grupo.videos { --cor: var(--video); }
+  .grupo.fichas { --cor: #0F7B6C; }
+  .grupo.trabalhos { --cor: #7B3FA0; }
+  .grupo.avaliacoes { --cor: #B8481F; }
   .grupo ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
   .item {
     border-left: 4px solid var(--cor);
@@ -1009,6 +1012,12 @@ const QUIZ_FM_II = [
     e: "O capital duplica quando 1,1ᵗ = 2; aplicando logaritmos, t · log 1,1 = log 2, logo t = log 2 ÷ log 1,1 ≈ 7,3 anos." }
 ];
 
+/* Além de livros, slides e vídeos, cada disciplina pode ter (opcional):
+     fichas:     [ { titulo: "Ficha 1 - Limites", drive: "ID_DO_FICHEIRO" } ],
+     trabalhos:  [ { titulo: "Trabalho 1", drive: "ID_DO_FICHEIRO" } ],
+     avaliacoes: [ { titulo: "Teste 1 (2026/27)", drive: "ID_DO_FICHEIRO" } ],
+   Escreva-os dentro da disciplina, ao lado de livros / slides / videos
+   (lembre-se da vírgula depois do ] anterior). Se não pôr nada, aparece «Ainda sem materiais». */
 const UCS = [
   {
     nome: "Estatística Descritiva", quiz: QUIZ_ESTATISTICA,
@@ -1224,7 +1233,8 @@ function desenhar(q) {
     const ucBate = q && norm(uc.nome + " " + (uc.info || "")).includes(q);
     const filtra = arr => !q || ucBate ? arr : arr.filter(it => norm(it.titulo).includes(q));
     const livros = filtra(uc.livros), slides = filtra(uc.slides), videos = filtra(uc.videos);
-    const n = livros.length + slides.length + videos.length;
+    const fichas = filtra(uc.fichas || []), trabalhos = filtra(uc.trabalhos || []), avaliacoes = filtra(uc.avaliacoes || []);
+    const n = livros.length + slides.length + videos.length + fichas.length + trabalhos.length + avaliacoes.length;
     const quizBate = q.length >= 2 && "quiz".includes(q) && (uc.quiz || []).length > 0;
     if (q && !ucBate && !quizBate && n === 0) return "";
     ucsVisiveis++; total += n;
@@ -1235,6 +1245,9 @@ function desenhar(q) {
         ${grupo("livros", "Livros", livros, q, "ficheiro")}
         ${grupo("slides", "Slides", slides, q, "ficheiro")}
         ${grupo("videos", "Vídeos", videos, q, "video")}
+        ${grupo("fichas", "Fichas de exercícios", fichas, q, "ficheiro")}
+        ${grupo("trabalhos", "Trabalhos", trabalhos, q, "ficheiro")}
+        ${grupo("avaliacoes", "Avaliações realizadas", avaliacoes, q, "ficheiro")}
         ${!q || ucBate || quizBate ? grupoQuiz(uc, ix) : ""}
       </div>
     </details>`;
@@ -1257,7 +1270,30 @@ $("contactos").innerHTML = `
   <a href="tel:${esc(tel)}">Ligar <small>${esc(SITE.telemovel)}</small></a>
   <a href="https://wa.me/${esc(wa)}" target="_blank" rel="noopener">WhatsApp</a>
   <a href="mailto:${esc(SITE.email)}">E-mail <small>${esc(SITE.email)}</small></a>`;
-$("rodape").textContent = "William da Trindade do Nascimento · Atualizado em " + SITE.atualizado;
+/* Rodapé: «Atualizado em» muda sozinho a cada alteração guardada no GitHub (data e hora).
+   Usa a data do último «Commit» do repositório; se falhar, usa a data do ficheiro; e, em último caso, SITE.atualizado. */
+const REPOSITORIO = "owilliamnascimento/Materiais";
+function mostrarRodape(texto) {
+  $("rodape").textContent = "William da Trindade do Nascimento · Atualizado em " + texto;
+}
+function formatarData(d) {
+  if (isNaN(d)) return null;
+  try {
+    const dt = d.toLocaleDateString("pt-PT", { day: "numeric", month: "long", year: "numeric", timeZone: "Africa/Sao_Tome" });
+    const hr = d.toLocaleTimeString("pt-PT", { hour: "2-digit", minute: "2-digit", timeZone: "Africa/Sao_Tome" });
+    return dt + " às " + hr;
+  } catch (e) { return null; }
+}
+mostrarRodape(formatarData(new Date(document.lastModified)) || SITE.atualizado);
+try {
+  fetch("https://api.github.com/repos/" + REPOSITORIO + "/commits?per_page=1")
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(j => {
+      const t = formatarData(new Date(j[0].commit.committer.date));
+      if (t) mostrarRodape(t);
+    })
+    .catch(() => {});
+} catch (e) {}
 
 /* Pesquisa */
 $("q").addEventListener("input", e => desenhar(norm(e.target.value.trim())));
