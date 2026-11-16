@@ -8,7 +8,7 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'%3E%3Crect width='1024' height='1024' rx='200' fill='white'/%3E%3Cpath d='M184 327 L348 717 L512 450 L676 717 L840 327' fill='none' stroke='%230D2646' stroke-width='76' stroke-linejoin='round'/%3E%3Cg fill='%230D2646'%3E%3Ccircle cx='184' cy='327' r='61'/%3E%3Ccircle cx='348' cy='717' r='61'/%3E%3Ccircle cx='512' cy='450' r='61'/%3E%3Ccircle cx='676' cy='717' r='61'/%3E%3C/g%3E%3Ccircle cx='840' cy='327' r='77' fill='%23F3A544'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
     --ink: #12264A;
@@ -180,6 +180,40 @@
     html { scroll-behavior: auto; }
     * { transition: none !important; }
   }
+
+  /* ---------- Tema moderno ---------- */
+  :root {
+    --ink: #0F2A4A; --ink-soft: #5B6B80; --paper: #F4F6FA;
+    --acento: #2563EB; --livro: #2563EB; --slide: #0EA5A4; --video: #E11D48;
+    --borda: #E1E8F2;
+    --font-title: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  body { background: linear-gradient(180deg, #EAF1FB 0, #F4F6FA 380px) no-repeat, #F4F6FA; font-size: 16.5px; }
+  .topbar { background: rgba(255,255,255,.94); color: var(--ink); box-shadow: 0 1px 0 var(--borda); backdrop-filter: blur(6px); }
+  .topbar .logo path { stroke: #0F2A4A; }
+  .topbar .logo g { fill: #0F2A4A; }
+  .topbar .nome { font-weight: 800; letter-spacing: .2px; }
+  .search input { border: 1px solid var(--borda); border-radius: 999px; background: var(--paper); }
+  .search input:focus { outline: 3px solid #BFDBFE; border-color: var(--acento); }
+  .btn-share { background: var(--acento); color: #fff; border-radius: 999px; }
+  .hero h1 { font-weight: 800; letter-spacing: -.03em; }
+  .hero h1 span { background: none; color: var(--acento); }
+  .contactos a { border: 1px solid var(--borda); border-radius: 999px; box-shadow: 0 2px 8px rgba(15,42,74,.06); }
+  .contactos a:hover { background: var(--acento); border-color: var(--acento); }
+  details.uc { border: 1px solid var(--borda); border-radius: 16px; box-shadow: 0 6px 20px rgba(15,42,74,.07); }
+  details.uc > summary:hover { background: #F7FAFE; }
+  details.uc[open] > summary { background: #fff; border-bottom: 1px solid var(--borda); }
+  .uc-nome { font-weight: 700; }
+  .item { background: #F7F9FC; border: 1px solid #E6ECF4; border-left: 0; border-radius: 12px; }
+  .acoes a { border-radius: 999px; }
+  .acoes a.baixar { background: var(--acento); }
+  .acoes a.abrir { border: 1px solid #CBD5E1; }
+  .acoes span.breve { border-radius: 999px; }
+  mark { background: #BFDBFE; }
+  .quiz-card { border-left: 0; border: 1px solid #E6ECF4; border-radius: 12px; }
+  .btn-jogar { background: var(--acento); border-radius: 999px; box-shadow: none; }
+  .grupo.fichas { --cor: #0F7B6C; } .grupo.trabalhos { --cor: #7B3FA0; } .grupo.avaliacoes { --cor: #B8481F; }
 
   /* ---------- Quiz ---------- */
   .grupo.quiz { --cor: #7A3FB0; grid-column: 1 / -1; }
