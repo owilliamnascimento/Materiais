@@ -215,6 +215,11 @@
   .quiz-card { border-left: 0; border: 1px solid #E6ECF4; border-radius: 12px; }
   .btn-jogar { background: var(--acento); border-radius: 999px; box-shadow: none; }
   .grupo.fichas { --cor: #0F7B6C; } .grupo.trabalhos { --cor: #7B3FA0; } .grupo.avaliacoes { --cor: #B8481F; }
+  /* Botões na cor da etiqueta do grupo (Livros, Slides, Vídeos, Fichas…) */
+  .grupo .acoes a.baixar { background: var(--cor); color: #fff; }
+  .grupo .acoes a.abrir { color: var(--cor); border: 1.5px solid var(--cor); background: #fff; }
+  .grupo .acoes a.abrir:hover { background: color-mix(in srgb, var(--cor) 10%, #fff); }
+  .grupo .acoes a.yt { background: var(--cor); }
 
   /* Nome da disciplina fixo por baixo da barra enquanto se percorre a lista dela */
   details.uc { overflow: clip; }
