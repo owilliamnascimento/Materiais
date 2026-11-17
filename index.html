@@ -136,6 +136,7 @@
   .grupo.livros { --cor: var(--livro); }
   .grupo.slides { --cor: var(--slide); }
   .grupo.videos { --cor: var(--video); }
+  .grupo.tabelas { --cor: #2F6FB5; }
   .grupo.fichas { --cor: #0F7B6C; }
   .grupo.trabalhos { --cor: #7B3FA0; }
   .grupo.avaliacoes { --cor: #B8481F; }
@@ -228,35 +229,7 @@
     html { scroll-padding-top: 70px; }
   }
 
-    /* ---------- Tabelas estatísticas ---------- */
-  dialog#tabelas { display: none; }
-  dialog#tabelas[open] { display: block; }
-  .tb-topo .qz-fechar { position: static; flex: none; }
-  .tb-corpo { display: flex; flex-direction: column; height: 100%; min-height: 0; }
-  .tb-topo, .tb-abas, .tb-calc { flex: none; }
-  .tb-scroll { flex: 1 1 auto; min-height: 120px; }
-  .tb-topo { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px 6px; }
-  .tb-topo h2 { margin: 0; font-size: 1.15rem; }
-  .tb-abas { display: flex; gap: 6px; flex-wrap: wrap; padding: 6px 16px; }
-  .tb-aba, .tb-chip { border: 1px solid var(--line, #cfd6e4); background: transparent; color: inherit; border-radius: 999px; padding: 8px 14px; font: inherit; cursor: pointer; min-height: 40px; }
-  .tb-aba.on, .tb-chip.on { background: var(--marker, #1f3a7a); color: #fff; border-color: transparent; }
-  .tb-chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 10px; }
-  .tb-calc { margin: 6px 16px 10px; padding: 12px; border: 1px solid var(--line, #cfd6e4); border-radius: 12px; }
-  .tb-calc h4 { margin: 0 0 8px; font-size: .95rem; }
-  .tb-linha { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; margin-bottom: 6px; }
-  .tb-linha label { display: flex; flex-direction: column; font-size: .8rem; gap: 3px; }
-  .tb-linha input { width: 90px; padding: 8px; font: inherit; font-size: 16px; border: 1px solid var(--line, #cfd6e4); border-radius: 8px; background: transparent; color: inherit; }
-  .tb-res { margin: 4px 0 10px; font-size: .9rem; font-weight: 600; min-height: 1.2em; overflow-wrap: anywhere; }
-  .tb-scroll { overflow: auto; margin: 0 16px 16px; max-height: 55vh; border: 1px solid var(--line, #cfd6e4); border-radius: 10px; padding: 8px; -webkit-overflow-scrolling: touch; }
-  table.tb { border-collapse: collapse; font-size: .82rem; font-variant-numeric: tabular-nums; width: max-content; min-width: 100%; }
-  table.tb th, table.tb td { padding: 5px 8px; text-align: right; border-bottom: 1px solid rgba(128,128,128,.2); white-space: nowrap; }
-  table.tb thead th:first-child { left: 0; z-index: 2; }
-  table.tb thead th { position: sticky; top: 0; background: #14275a; color: #fff; z-index: 1; }
-  table.tb tbody th { position: sticky; left: 0; background: #14275a; color: #fff; text-align: center; }
-  .tb-pdf { flex: none; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 16px 10px; font-weight: 600; font-size: .9rem; }
-  .tb-nota { font-size: .8rem; opacity: .8; margin: 8px 0 0; }
-
-  /* ---------- Quiz ---------- */
+    /* ---------- Quiz ---------- */
   .grupo.quiz { --cor: #7A3FB0; grid-column: 1 / -1; }
   .quiz-card {
     display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px;
@@ -403,9 +376,6 @@
 <footer id="rodape"></footer>
 <dialog class="qz-janela" id="quiz" aria-label="Quiz da disciplina">
   <div class="qz" id="qzCorpo"></div>
-</dialog>
-<dialog class="qz-janela" id="tabelas" aria-label="Tabelas estatísticas">
-  <div class="tb-corpo" id="tbCorpo"></div>
 </dialog>
 <div class="toast" id="toast" role="status"></div>
 
@@ -2494,15 +2464,6 @@ const QUIZ_FM_II = [
      avaliacoes: [ { titulo: "Teste 1 (2026/27)", drive: "ID_DO_FICHEIRO" } ],
    Escreva-os dentro da disciplina, ao lado de livros / slides / videos
    (lembre-se da vírgula depois do ] anterior). Se não pôr nada, aparece «Ainda sem materiais». */
-/* PDF das tabelas estatísticas: coloque o código do Drive de cada tabela
-   (o mesmo tipo de código que usa nos livros). Deixe "" se ainda não tiver. */
-const TABELAS_PDF = {
-  normal: { titulo: "Tabela Normal",         drive: "" },
-  t:      { titulo: "Tabela t de Student",   drive: "" },
-  qui:    { titulo: "Tabela Qui-quadrado",   drive: "" },
-  f:      { titulo: "Tabela F de Snedecor",  drive: "" }
-};
-
 /* Junta várias listas de perguntas, intercalando-as por dificuldade */
 function juntar(...listas) {
   return listas.flatMap(l => l.map((q, i) => ({ q, d: i / Math.max(1, l.length - 1) })))
@@ -2600,8 +2561,15 @@ const UCS = [
       { titulo: "Outliers", youtube: "https://youtu.be/C4mQtxaFZ6g?si=Jd7DsHVnFtnWa6JY" }
     ]
   },
-  { nome: "Estatística II", quiz: QUIZ_ESTATISTICA_II, tabelas: true,            livros: [], slides: [], videos: [] },
-  { nome: "Estatística e Probabilidades", quiz: QUIZ_EST_PROB, tabelas: true,
+  { nome: "Estatística II", quiz: QUIZ_ESTATISTICA_II,
+    tabelas: [
+      { titulo: "Tabela Normal",         drive: "" },
+      { titulo: "Tabela t de Student",   drive: "" },
+      { titulo: "Tabela Qui-quadrado",   drive: "" },
+      { titulo: "Tabela F de Snedecor",  drive: "" }
+    ],
+    livros: [], slides: [], videos: [] },
+  { nome: "Estatística e Probabilidades", quiz: QUIZ_EST_PROB, tabelas: [],
    livros: [
       { titulo: "Curso de Estatística - Jairo fonseca e Gilberto Martins", drive: "1zaapZ7k_lDzeRxQqDm38a6XEa2T5XlGI" },
       { titulo: "Estatística Descritiva - E. Reis", drive: "1TPpOzZLu7dH-bJPE_2V_vvb2BUG8iWHT" },
@@ -2690,7 +2658,7 @@ const PARTILHA = {
   "Estatística e Probabilidades": ["Estatística Descritiva", "Estatística I", "Estatística II"]
 };
 (function partilhar() {
-  const CAMPOS = ["livros", "slides", "videos", "fichas", "trabalhos", "avaliacoes"];
+  const CAMPOS = ["livros", "slides", "videos", "tabelas", "fichas", "trabalhos", "avaliacoes"];
   const copia = UCS.map(u => Object.fromEntries(CAMPOS.map(c => [c, (u[c] || []).slice()])));
   UCS.forEach((uc, i) => {
     (PARTILHA[uc.nome] || []).forEach(origem => {
@@ -2754,9 +2722,9 @@ function desenhar(q) {
     const ucBate = q && norm(uc.nome + " " + (uc.info || "")).includes(q);
     const filtra = arr => !q || ucBate ? arr : arr.filter(it => norm(it.titulo).includes(q));
     const livros = filtra(uc.livros), slides = filtra(uc.slides), videos = filtra(uc.videos);
-    const fichas = filtra(uc.fichas || []), trabalhos = filtra(uc.trabalhos || []), avaliacoes = filtra(uc.avaliacoes || []);
-    const n = livros.length + slides.length + videos.length + fichas.length + trabalhos.length + avaliacoes.length;
-    const quizBate = (q.length >= 2 && "quiz".includes(q) && (uc.quiz || []).length > 0) || (q.length >= 3 && !!uc.tabelas && "tabelas estatisticas normal student qui quadrado snedecor".includes(q));
+    const tabelas = filtra(uc.tabelas || []), fichas = filtra(uc.fichas || []), trabalhos = filtra(uc.trabalhos || []), avaliacoes = filtra(uc.avaliacoes || []);
+    const n = livros.length + slides.length + videos.length + tabelas.length + fichas.length + trabalhos.length + avaliacoes.length;
+    const quizBate = q.length >= 2 && "quiz".includes(q) && (uc.quiz || []).length > 0;
     if (q && !ucBate && !quizBate && n === 0) return "";
     ucsVisiveis++; total += n;
     const abre = q ? " open" : "";
@@ -2766,11 +2734,11 @@ function desenhar(q) {
         ${grupo("livros", "Livros", livros, q, "ficheiro")}
         ${grupo("slides", "Slides", slides, q, "ficheiro")}
         ${grupo("videos", "Vídeos", videos, q, "video")}
+        ${uc.tabelas ? grupo("tabelas", "Tabelas estatísticas", tabelas, q, "ficheiro") : ""}
         ${grupo("fichas", "Fichas de exercícios", fichas, q, "ficheiro")}
         ${grupo("trabalhos", "Trabalhos", trabalhos, q, "ficheiro")}
         ${grupo("avaliacoes", "Avaliações realizadas", avaliacoes, q, "ficheiro")}
         ${!q || ucBate || quizBate ? grupoQuiz(uc, ix) : ""}
-        ${uc.tabelas && (!q || ucBate || "tabelas estatisticas normal student qui quadrado snedecor".includes(q)) ? grupoTabelas(ix) : ""}
       </div>
     </details>`;
   }).join("");
@@ -3147,239 +3115,10 @@ function saltar() {
   Q.atual = preparar(Q.perguntas[Q.idx]);
 }
 
-/* ---------- Tabelas estatísticas: fórmulas (tudo calculado, nada copiado à mão) ---------- */
-const MAT = {
-  lgamma(x) {
-    const c = [76.18009172947146, -86.50532032941677, 24.01409824083091, -1.231739572450155, 0.1208650973866179e-2, -0.5395239384953e-5];
-    let y = x, t = x + 5.5;
-    t -= (x + 0.5) * Math.log(t);
-    let s = 1.000000000190015;
-    for (let j = 0; j < 6; j++) s += c[j] / ++y;
-    return -t + Math.log(2.5066282746310005 * s / x);
-  },
-  betacf(a, b, x) {
-    const TINY = 1e-300;
-    const qab = a + b, qap = a + 1, qam = a - 1;
-    let c = 1, d = 1 - qab * x / qap;
-    if (Math.abs(d) < TINY) d = TINY;
-    d = 1 / d;
-    let h = d;
-    for (let m = 1; m <= 500; m++) {
-      const m2 = 2 * m;
-      let aa = m * (b - m) * x / ((qam + m2) * (a + m2));
-      d = 1 + aa * d; if (Math.abs(d) < TINY) d = TINY;
-      c = 1 + aa / c; if (Math.abs(c) < TINY) c = TINY;
-      d = 1 / d; h *= d * c;
-      aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2));
-      d = 1 + aa * d; if (Math.abs(d) < TINY) d = TINY;
-      c = 1 + aa / c; if (Math.abs(c) < TINY) c = TINY;
-      d = 1 / d;
-      const del = d * c;
-      h *= del;
-      if (Math.abs(del - 1) < 1e-15) break;
-    }
-    return h;
-  },
-  /* beta incompleta regularizada I_x(a, b) */
-  ibeta(x, a, b) {
-    if (x <= 0) return 0;
-    if (x >= 1) return 1;
-    const bt = Math.exp(this.lgamma(a + b) - this.lgamma(a) - this.lgamma(b) + a * Math.log(x) + b * Math.log(1 - x));
-    return x < (a + 1) / (a + b + 2) ? bt * this.betacf(a, b, x) / a : 1 - bt * this.betacf(b, a, 1 - x) / b;
-  },
-  /* gama incompleta regularizada: devolve [P, Q] */
-  gama(a, x) {
-    if (x <= 0) return [0, 1];
-    const g = this.lgamma(a);
-    if (x < a + 1) {
-      let ap = a, sum = 1 / a, del = sum;
-      for (let n = 0; n < 2000; n++) { ap++; del *= x / ap; sum += del; if (Math.abs(del) < Math.abs(sum) * 1e-16) break; }
-      const P = sum * Math.exp(-x + a * Math.log(x) - g);
-      return [P, 1 - P];
-    }
-    let b = x + 1 - a, c = 1e300, d = 1 / b, h = d;
-    for (let i = 1; i < 2000; i++) {
-      const an = -i * (i - a);
-      b += 2; d = an * d + b; if (Math.abs(d) < 1e-300) d = 1e-300;
-      c = b + an / c; if (Math.abs(c) < 1e-300) c = 1e-300;
-      d = 1 / d;
-      const del = d * c; h *= del;
-      if (Math.abs(del - 1) < 1e-15) break;
-    }
-    const Q = Math.exp(-x + a * Math.log(x) - g) * h;
-    return [1 - Q, Q];
-  },
-  /* caudas superiores */
-  nCauda(z) { const q = 0.5 * this.gama(0.5, z * z / 2)[1]; return z >= 0 ? q : 1 - q; },
-  tCauda(t, v) { const q = 0.5 * this.ibeta(v / (v + t * t), v / 2, 0.5); return t >= 0 ? q : 1 - q; },
-  xCauda(x, v) { return this.gama(v / 2, x / 2)[1]; },
-  fCauda(f, d1, d2) { return f <= 0 ? 1 : this.ibeta(d2 / (d2 + d1 * f), d2 / 2, d1 / 2); },
-  /* valor x ≥ 0 tal que cauda(x) = alfa (a cauda superior desce de 1 para 0) */
-  inv(cauda, alfa) {
-    let lo = 0, hi = 1;
-    while (cauda(hi) > alfa && hi < 1e15) hi *= 2;
-    for (let i = 0; i < 200; i++) {
-      const m = (lo + hi) / 2;
-      if (cauda(m) > alfa) lo = m; else hi = m;
-    }
-    return (lo + hi) / 2;
-  },
-  /* quantil da normal / t com cauda superior alfa (alfa entre 0 e 1, qualquer lado) */
-  nQ(alfa) { return alfa <= 0.5 ? this.inv(z => this.nCauda(z), alfa) : -this.inv(z => this.nCauda(z), 1 - alfa); },
-  tQ(alfa, v) { return alfa <= 0.5 ? this.inv(t => this.tCauda(t, v), alfa) : -this.inv(t => this.tCauda(t, v), 1 - alfa); },
-  xQ(alfa, v) { return this.inv(x => this.xCauda(x, v), alfa); },
-  fQ(alfa, d1, d2) { return this.inv(f => this.fCauda(f, d1, d2), alfa); }
-};
-
-/* ---------- Tabelas estatísticas (janela) ---------- */
-const TAB_DEF = {
-  normal: { nome: "Normal", sub: "N(0, 1)" },
-  t:      { nome: "t de Student", sub: "t(ν)" },
-  qui:    { nome: "Qui-quadrado", sub: "χ²(ν)" },
-  f:      { nome: "F de Snedecor", sub: "F(ν₁, ν₂)" }
-};
-const TAB = { aba: "normal", alfaF: 0.05 };
-const dlgTab = $("tabelas");
-const num = (v, d) => (Number.isFinite(v) ? v.toFixed(d).replace(".", ",") : "—");
-const lerNum = s => parseFloat(String(s).replace(",", "."));
-const GL_T = [...Array.from({ length: 30 }, (_, i) => i + 1), 40, 60, 120, Infinity];
-const GL_X = [...Array.from({ length: 30 }, (_, i) => i + 1), 40, 50, 60, 70, 80, 90, 100];
-const GL_F1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20, 30, 60, 120];
-const GL_F2 = [...Array.from({ length: 30 }, (_, i) => i + 1), 40, 60, 120];
-const ALFA_T = [0.10, 0.05, 0.025, 0.01, 0.005, 0.0005];
-const ALFA_X = [0.995, 0.99, 0.975, 0.95, 0.90, 0.10, 0.05, 0.025, 0.01, 0.005];
-
-function tabNormal() {
-  let h = `<table class="tb"><thead><tr><th>z</th>${Array.from({ length: 10 }, (_, j) => `<th>0,0${j}</th>`).join("")}</tr></thead><tbody>`;
-  for (let i = 0; i <= 39; i++) {
-    h += `<tr><th>${num(i / 10, 1)}</th>`;
-    for (let j = 0; j < 10; j++) h += `<td>${num(1 - MAT.nCauda(i / 10 + j / 100), 4)}</td>`;
-    h += "</tr>";
-  }
-  return h + `</tbody></table><p class="tb-nota">Valores de Φ(z) = P(Z ≤ z), para z ≥ 0. Para z negativo: Φ(−z) = 1 − Φ(z).</p>`;
-}
-function tabT() {
-  let h = `<table class="tb"><thead><tr><th>ν \\ α</th>${ALFA_T.map(a => `<th>${num(a, a < 0.001 ? 4 : 3)}</th>`).join("")}</tr></thead><tbody>`;
-  for (const v of GL_T) {
-    h += `<tr><th>${v === Infinity ? "∞" : v}</th>`;
-    for (const a of ALFA_T) h += `<td>${num(v === Infinity ? MAT.nQ(a) : MAT.tQ(a, v), 3)}</td>`;
-    h += "</tr>";
-  }
-  return h + `</tbody></table><p class="tb-nota">Valor t tal que P(T &gt; t) = α (cauda direita). Num teste bilateral use α/2.</p>`;
-}
-function tabQui() {
-  let h = `<table class="tb"><thead><tr><th>ν \\ α</th>${ALFA_X.map(a => `<th>${num(a, 3)}</th>`).join("")}</tr></thead><tbody>`;
-  for (const v of GL_X) {
-    h += `<tr><th>${v}</th>`;
-    for (const a of ALFA_X) h += `<td>${num(MAT.xQ(a, v), v > 20 ? 2 : 3)}</td>`;
-    h += "</tr>";
-  }
-  return h + `</tbody></table><p class="tb-nota">Valor χ² tal que P(χ² &gt; x) = α (cauda direita).</p>`;
-}
-function tabF() {
-  const a = TAB.alfaF;
-  const bt = [0.10, 0.05, 0.025, 0.01].map(x => `<button type="button" class="tb-chip${x === a ? " on" : ""}" data-alfaf="${x}">α = ${num(x, x === 0.025 ? 3 : 2)}</button>`).join("");
-  let h = `<div class="tb-chips">${bt}</div><table class="tb"><thead><tr><th>ν₂ \\ ν₁</th>${GL_F1.map(d => `<th>${d}</th>`).join("")}</tr></thead><tbody>`;
-  for (const d2 of GL_F2) {
-    h += `<tr><th>${d2}</th>`;
-    for (const d1 of GL_F1) h += `<td>${num(MAT.fQ(a, d1, d2), 2)}</td>`;
-    h += "</tr>";
-  }
-  return h + `</tbody></table><p class="tb-nota">Valor f tal que P(F &gt; f) = α, com ν₁ graus de liberdade no numerador (colunas) e ν₂ no denominador (linhas).</p>`;
-}
-const GRAUS = {
-  normal: "",
-  t: `<label>ν <input type="text" inputmode="decimal" id="cv1" value="10"></label>`,
-  qui: `<label>ν <input type="text" inputmode="decimal" id="cv1" value="5"></label>`,
-  f: `<label>ν₁ <input type="text" inputmode="decimal" id="cv1" value="5"></label><label>ν₂ <input type="text" inputmode="decimal" id="cv2" value="10"></label>`
-};
-function calcHtml(k) {
-  const x0 = { normal: "1,96", t: "2,228", qui: "11,07", f: "3,33" }[k];
-  return `<div class="tb-calc">
-    <h4>Calculadora</h4>
-    <div class="tb-linha">${GRAUS[k]}
-      <label>${k === "normal" ? "z" : k === "t" ? "t" : k === "qui" ? "χ²" : "f"} <input type="text" inputmode="decimal" id="cx" value="${x0}"></label>
-      <button type="button" class="btn-jogar" data-acao-tab="valor">Calcular probabilidade</button>
-    </div>
-    <p class="tb-res" id="resP" aria-live="polite"></p>
-    <div class="tb-linha">${GRAUS[k] ? "" : ""}
-      <label>α (cauda direita) <input type="text" inputmode="decimal" id="ca" value="0,05"></label>
-      <button type="button" class="btn-jogar" data-acao-tab="alfa">Calcular valor crítico</button>
-    </div>
-    <p class="tb-res" id="resV" aria-live="polite"></p>
-  </div>`;
-}
-function tabCalcular(modo) {
-  const k = TAB.aba, v1 = lerNum(($("cv1") || {}).value), v2 = lerNum(($("cv2") || {}).value);
-  if (modo === "valor") {
-    const x = lerNum($("cx").value), out = $("resP");
-    let d = null;
-    if (!Number.isFinite(x)) { out.textContent = "Escreva um número."; return; }
-    if (k === "normal") d = MAT.nCauda(x);
-    else if (k === "t" && v1 > 0) d = MAT.tCauda(x, v1);
-    else if (k === "qui" && v1 > 0) d = MAT.xCauda(x, v1);
-    else if (k === "f" && v1 > 0 && v2 > 0) d = MAT.fCauda(x, v1, v2);
-    if (d === null) { out.textContent = "Indique graus de liberdade positivos."; return; }
-    let t = `Cauda direita P(> ${$("cx").value}) = ${num(d, 5)}  ·  Cauda esquerda = ${num(1 - d, 5)}`;
-    if (k === "normal" || k === "t") t += `  ·  Bilateral P(|·| > ${num(Math.abs(x), 3)}) = ${num(2 * Math.min(d, 1 - d), 5)}`;
-    out.textContent = t;
-  } else {
-    const a = lerNum($("ca").value), out = $("resV");
-    if (!(a > 0 && a < 1)) { out.textContent = "α tem de estar entre 0 e 1."; return; }
-    let x = null;
-    if (k === "normal") x = MAT.nQ(a);
-    else if (k === "t" && v1 > 0) x = MAT.tQ(a, v1);
-    else if (k === "qui" && v1 > 0) x = MAT.xQ(a, v1);
-    else if (k === "f" && v1 > 0 && v2 > 0) x = MAT.fQ(a, v1, v2);
-    out.textContent = x === null ? "Indique graus de liberdade positivos." : `Valor crítico = ${num(x, 4)}`;
-  }
-}
-function pdfTabela(k) {
-  const t = TABELAS_PDF[k];
-  if (!t || !t.drive) return "";
-  const id = encodeURIComponent(t.drive);
-  return `<div class="tb-pdf"><span>${esc(t.titulo)} (PDF)</span>
-    <a class="baixar" href="https://drive.google.com/uc?export=download&id=${id}" rel="noopener">Descarregar</a>
-    <a class="abrir" href="https://drive.google.com/file/d/${id}/view" target="_blank" rel="noopener">Abrir</a></div>`;
-}
-function desenharTabelas() {
-  const k = TAB.aba;
-  const abas = Object.keys(TAB_DEF).map(i => `<button type="button" role="tab" aria-selected="${i === k}" class="tb-aba${i === k ? " on" : ""}" data-aba="${i}">${TAB_DEF[i].nome}</button>`).join("");
-  const corpo = { normal: tabNormal, t: tabT, qui: tabQui, f: tabF }[k]();
-  $("tbCorpo").innerHTML = `<div class="tb-topo"><h2>Tabelas estatísticas</h2><button type="button" class="qz-fechar" data-acao-tab="fechar" aria-label="Fechar">✕</button></div>
-    <div class="tb-abas" role="tablist">${abas}</div>
-    ${calcHtml(k)}
-    ${pdfTabela(k)}
-    <div class="tb-scroll">${corpo}</div>`;
-}
-function abrirTabelas() {
-  desenharTabelas();
-  if (!dlgTab.open) dlgTab.showModal();
-}
-dlgTab.addEventListener("click", e => {
-  if (e.target === dlgTab) return dlgTab.close();
-  const a = e.target.closest("[data-aba]");
-  if (a) { TAB.aba = a.dataset.aba; return desenharTabelas(); }
-  const f = e.target.closest("[data-alfaf]");
-  if (f) { TAB.alfaF = Number(f.dataset.alfaf); return desenharTabelas(); }
-  const c = e.target.closest("[data-acao-tab]");
-  if (!c) return;
-  if (c.dataset.acaoTab === "fechar") dlgTab.close();
-  else tabCalcular(c.dataset.acaoTab);
-});
-dlgTab.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.matches("input")) { tabCalcular("valor"); tabCalcular("alfa"); } });
-function grupoTabelas(ix) {
-  return `<section class="grupo tabelas"><h3>Tabelas estatísticas</h3>
-    <div class="quiz-card"><div><strong>Normal, t de Student, qui-quadrado e F</strong>
-    <p>Tabelas completas e calculadora de probabilidades e valores críticos.</p></div>
-    <button type="button" class="btn-jogar" data-tabelas="${ix}">Abrir tabelas</button></div></section>`;
-}
-
 /* ---------- Eventos ---------- */
 $("lista").addEventListener("click", e => {
   const b = e.target.closest("[data-quiz]");
   if (b) abrirQuiz(Number(b.dataset.quiz));
-  if (e.target.closest("[data-tabelas]")) abrirTabelas();
 });
 
 dlg.addEventListener("click", e => {
